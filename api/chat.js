@@ -20,7 +20,7 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-opus-4-5',
         max_tokens: 1500,
         system: systemPrompt,
         messages
@@ -30,13 +30,13 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: data.error?.message || 'API error' });
+      return res.status(200).json({ reply: 'Erro API: ' + JSON.stringify(data.error) });
     }
 
-    const reply = data.content?.find(b => b.type === 'text')?.text || '';
+    const reply = data.content?.find(b => b.type === 'text')?.text || 'Sem resposta';
     return res.status(200).json({ reply });
 
   } catch (err) {
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(200).json({ reply: 'Erro interno: ' + err.message });
   }
 }
