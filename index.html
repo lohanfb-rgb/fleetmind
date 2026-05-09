@@ -1408,7 +1408,19 @@ Responda sempre em português brasileiro. Use markdown básico: **negrito** para
     });
 
     const data = await response.json();
-    const reply = data.reply || data.error || 'Desculpe, ocorreu um erro. Tente novamente.';
+  let reply = '';
+if (typeof data === 'string') {
+  reply = data;
+} else if (data.reply && typeof data.reply === 'string') {
+  reply = data.reply;
+} else if (data.content && Array.isArray(data.content)) {
+  reply = data.content.find(b => b.type === 'text')?.text || '';
+} else if (data.error) {
+  reply = 'Erro: ' + data.error;
+} else {
+  reply = JSON.stringify(data);
+}
+if (!reply) reply = 'Desculpe, ocorreu um erro. Tente novamente.';
 
     removeTyping();
     appendMessage('agent', reply);
