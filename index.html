@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FleetMind — Consultoria Inteligente de Frota</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --border: #222222;
+    --accent: #e8ff3a;
+    --accent2: #ff6b35;
+    --text: #f0f0f0;
+    --muted: #666666;
+    --success: #3aff8a;
+    --error: #ff3a3a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* GRID TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(232,255,58,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(232,255,58,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ===== LANDING ===== */
+  #landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { color: var(--accent); }
+
+  .nav-tag {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 2px;
+  }
+
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 48px;
+    text-align: center;
+    position: relative;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(232,255,58,0.08);
+    border: 1px solid rgba(232,255,58,0.2);
+    padding: 8px 16px;
+    border-radius: 2px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 40px;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .dot-live {
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -3px;
+    margin-bottom: 8px;
+    animation: fadeDown 0.6s 0.1s ease both;
+  }
+
+  .hero h1 em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    color: var(--accent);
+    font-weight: 400;
+  }
+
+  .hero-sub {
+    font-size: clamp(14px, 2vw, 18px);
+    color: var(--muted);
+    max-width: 540px;
+    line-height: 1.7;
+    margin: 32px auto 56px;
+    animation: fadeDown 0.6s 0.2s ease both;
+  }
+
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 900px;
+    width: 100%;
+    margin-bottom: 48px;
+    animation: fadeDown 0.6s 0.3s ease both;
+  }
+
+  .plan {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 28px 24px;
+    text-align: left;
+    position: relative;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+    border-radius: 4px;
+  }
+
+  .plan:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .plan.featured {
+    border-color: var(--accent);
+    background: rgba(232,255,58,0.04);
+  }
+
+  .plan-tag {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    background: var(--accent);
+    color: #000;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+  }
+
+  .plan-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .plan-price {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .plan-price span {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .plan-period {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .plan-features li {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .plan-features li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .btn-plan {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 2px;
+  }
+
+  .btn-plan:hover, .plan.featured .btn-plan {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+
+  .trust-bar {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    justify-content: center;
+    animation: fadeDown 0.6s 0.4s ease both;
+    flex-wrap: wrap;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .trust-item svg { color: var(--accent); }
+
+  /* ===== ACCESS GATE ===== */
+  #access-gate {
+    display: none;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    padding: 40px;
+  }
+
+  .gate-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 48px;
+    max-width: 440px;
+    width: 100%;
+    border-radius: 4px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .gate-icon {
+    width: 48px;
+    height: 48px;
+    background: rgba(232,255,58,0.1);
+    border: 1px solid rgba(232,255,58,0.2);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    font-size: 20px;
+  }
+
+  .gate-box h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .gate-box p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .input-group label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .input-group input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    padding: 14px 16px;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .input-group input:focus { border-color: var(--accent); }
+
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    border: none;
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    border-radius: 2px;
+    margin-top: 8px;
+  }
+
+  .btn-primary:hover { opacity: 0.85; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .gate-back {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .gate-back:hover { color: var(--text); }
+
+  .error-msg {
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 8px;
+    display: none;
+  }
+
+  /* ===== CHAT ===== */
+  #chat-app {
+    display: none;
+    height: 100vh;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+  }
+
+  .chat-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 32px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  .chat-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .agent-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .agent-info h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .agent-status {
+    font-size: 11px;
+    color: var(--success);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .agent-status::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--success);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  .chat-plan-tag {
+    font-size: 11px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 2px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    scroll-behavior: smooth;
+  }
+
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-track { background: transparent; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .msg {
+    display: flex;
+    gap: 16px;
+    max-width: 780px;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+
+  .msg-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .msg.agent .msg-avatar { background: var(--accent); color: #000; }
+  .msg.user .msg-avatar { background: var(--surface2); color: var(--muted); }
+
+  .msg-content {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.7;
+    max-width: 600px;
+  }
+
+  .msg.user .msg-content {
+    background: var(--surface2);
+    border-color: rgba(232,255,58,0.15);
+  }
+
+  .msg-content strong { color: var(--accent); font-weight: 500; }
+
+  .msg-content ul, .msg-content ol {
+    padding-left: 20px;
+    margin: 8px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .msg-time {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 16px 20px;
+  }
+
+  .typing-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--muted);
+    border-radius: 50%;
+    animation: typingBounce 1.2s infinite;
+  }
+
+  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+  }
+
+  .chat-input-area {
+    border-top: 1px solid var(--border);
+    padding: 20px 32px;
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+
+  .quick-prompts {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+
+  .quick-prompt {
+    font-size: 11px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: 'DM Mono', monospace;
+    background: transparent;
+    white-space: nowrap;
+  }
+
+  .quick-prompt:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .input-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+  }
+
+  .chat-textarea {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    padding: 14px 16px;
+    border-radius: 2px;
+    outline: none;
+    resize: none;
+    transition: border-color 0.2s;
+    line-height: 1.5;
+    max-height: 120px;
+    min-height: 50px;
+  }
+
+  .chat-textarea:focus { border-color: var(--accent); }
+
+  .chat-textarea::placeholder { color: var(--muted); }
+
+  .btn-send {
+    background: var(--accent);
+    border: none;
+    color: #000;
+    width: 50px;
+    height: 50px;
+    border-radius: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: opacity 0.2s;
+  }
+
+  .btn-send:hover { opacity: 0.85; }
+  .btn-send:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  /* ===== ADMIN PANEL ===== */
+  #admin-panel {
+    display: none;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+    padding: 40px;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .admin-header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+  }
+
+  .admin-header h1 span { color: var(--accent); }
+
+  .btn-back {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  .btn-back:hover { border-color: var(--text); color: var(--text); }
+
+  .admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .admin-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+  }
+
+  .admin-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .admin-card h3 span { color: var(--accent); }
+
+  .knowledge-textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 16px;
+    border-radius: 2px;
+    outline: none;
+    resize: vertical;
+    line-height: 1.6;
+    min-height: 300px;
+    transition: border-color 0.2s;
+  }
+
+  .knowledge-textarea:focus { border-color: var(--accent); }
+
+  .save-hint {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  .btn-save {
+    background: var(--accent);
+    border: none;
+    color: #000;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    border-radius: 2px;
+    cursor: pointer;
+    margin-top: 12px;
+    transition: opacity 0.2s;
+  }
+
+  .btn-save:hover { opacity: 0.85; }
+
+  .access-keys {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .key-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 2px;
+    font-size: 12px;
+  }
+
+  .key-code { color: var(--accent); font-weight: 500; }
+  .key-plan { color: var(--muted); }
+
+  .key-del {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+
+  .key-del:hover { color: var(--error); }
+
+  .add-key-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .add-key-row input, .add-key-row select {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 10px 14px;
+    border-radius: 2px;
+    outline: none;
+  }
+
+  .add-key-row select option { background: var(--bg); }
+
+  .btn-add {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    padding: 10px 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-add:hover { border-color: var(--accent); color: var(--accent); }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .stat-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 16px;
+    border-radius: 2px;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ===== UTILS ===== */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-hidden { display: none !important; }
+
+  @media (max-width: 768px) {
+    .plans { grid-template-columns: 1fr; }
+    .nav { padding: 16px 24px; }
+    .hero { padding: 48px 24px; }
+    .admin-grid { grid-template-columns: 1fr; }
+    .chat-messages { padding: 16px; }
+    .chat-input-area { padding: 16px; }
+    .quick-prompts { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== LANDING ===== -->
+<section id="landing">
+  <nav class="nav">
+    <div class="logo">Fleet<span>Mind</span></div>
+    <div class="nav-tag">CONSULTORIA IA · 24/7</div>
+    <button class="btn-back" onclick="showAdmin()" style="font-size:11px;padding:8px 14px;">⚙ Admin</button>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-badge">
+      <div class="dot-live"></div>
+      Agente especialista online agora
+    </div>
+
+    <h1>Gestão de<br><em>frota</em><br>inteligente.</h1>
+
+    <p class="hero-sub">
+      Acesse um consultor especialista em gestão de frotas, disponível 24 horas por dia. 
+      Responde com base em anos de experiência operacional real. Sem agendamentos. Sem espera.
+    </p>
+
+    <div class="plans">
+      <div class="plan" onclick="selectPlan('Starter · R$297/mês')">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">R$297<span>/mês</span></div>
+        <div class="plan-period">Acesso mensal</div>
+        <ul class="plan-features">
+          <li>50 consultas por mês</li>
+          <li>Diagnóstico de custos</li>
+          <li>Gestão de motoristas</li>
+          <li>Manutenção preventiva</li>
+        </ul>
+        <button class="btn-plan">Começar agora</button>
+      </div>
+
+      <div class="plan featured" onclick="selectPlan('Pro · R$597/mês')">
+        <div class="plan-tag">MAIS POPULAR</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">R$597<span>/mês</span></div>
+        <div class="plan-period">Acesso ilimitado</div>
+        <ul class="plan-features">
+          <li>Consultas ilimitadas 24/7</li>
+          <li>Torre de controle de frota</li>
+          <li>Análise de KPIs avançada</li>
+          <li>Redução de custos operacionais</li>
+          <li>Segurança e rastreamento</li>
+        </ul>
+        <button class="btn-plan">Começar agora</button>
+      </div>
+
+      <div class="plan" onclick="selectPlan('Enterprise · R$1.497/mês')">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">R$1.497<span>/mês</span></div>
+        <div class="plan-period">Agente customizado</div>
+        <ul class="plan-features">
+          <li>Agente com sua marca</li>
+          <li>Base de conhecimento própria</li>
+          <li>Integração com seu ERP</li>
+          <li>Onboarding dedicado</li>
+          <li>Suporte prioritário</li>
+        </ul>
+        <button class="btn-plan">Falar com equipe</button>
+      </div>
+    </div>
+
+    <div class="trust-bar">
+      <div class="trust-item">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+        Conhecimento real de mercado
+      </div>
+      <div class="trust-item">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Resposta imediata
+      </div>
+      <div class="trust-item">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Disponível 24/7
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ACCESS GATE ===== -->
+<section id="access-gate" style="display:none;">
+  <div class="gate-box">
+    <div class="gate-icon">🔑</div>
+    <h2>Acessar consultoria</h2>
+    <p>Digite sua chave de acesso recebida após o pagamento para entrar na plataforma.</p>
+
+    <div class="input-group">
+      <label>Chave de acesso</label>
+      <input type="text" id="access-key-input" placeholder="Ex: FROTA-XXXX-XXXX" 
+             onkeydown="if(event.key==='Enter') validateAccess()">
+    </div>
+    <div class="error-msg" id="access-error">Chave inválida ou expirada. Tente novamente.</div>
+
+    <button class="btn-primary" onclick="validateAccess()" id="btn-validate">
+      Entrar na plataforma →
+    </button>
+
+    <div class="gate-back" onclick="showLanding()">← Voltar para os planos</div>
+  </div>
+</section>
+
+<!-- ===== CHAT APP ===== -->
+<section id="chat-app" style="display:none;flex-direction:column;">
+  <div class="chat-header">
+    <div class="chat-header-left">
+      <div class="agent-avatar">FM</div>
+      <div class="agent-info">
+        <h3>FleetMind Consultor</h3>
+        <div class="agent-status">Online · Especialista em Gestão de Frota</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="chat-plan-tag" id="plan-display">PRO</div>
+      <button class="btn-back" onclick="showLanding()">Sair</button>
+    </div>
+  </div>
+
+  <div class="chat-messages" id="chat-messages"></div>
+
+  <div class="chat-input-area">
+    <div class="quick-prompts">
+      <button class="quick-prompt" onclick="usePrompt(this)">Meu custo por km está alto, o que faço?</button>
+      <button class="quick-prompt" onclick="usePrompt(this)">Frota com muita manutenção corretiva</button>
+      <button class="quick-prompt" onclick="usePrompt(this)">Como montar torre de controle?</button>
+      <button class="quick-prompt" onclick="usePrompt(this)">Alta rotatividade de motoristas</button>
+      <button class="quick-prompt" onclick="usePrompt(this)">Quero reduzir custo operacional agora</button>
+    </div>
+    <div class="input-row">
+      <textarea class="chat-textarea" id="chat-input" 
+        placeholder="Descreva sua dor ou situação de frota..." 
+        rows="2"
+        onkeydown="handleKey(event)"
+        oninput="autoResize(this)"></textarea>
+      <button class="btn-send" id="btn-send" onclick="sendMessage()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ADMIN ===== -->
+<section id="admin-panel" style="display:none;">
+  <div class="admin-header">
+    <h1>Painel <span>Admin</span></h1>
+    <button class="btn-back" onclick="showLanding()">← Voltar ao site</button>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px;display:flex;align-items:center;gap:16px;">
+    <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Senha admin:</div>
+    <input type="password" id="admin-pass-input" placeholder="Digite a senha" 
+           style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:10px 14px;border-radius:2px;outline:none;flex:1;max-width:300px;"
+           onkeydown="if(event.key==='Enter') checkAdminPass()">
+    <button class="btn-save" onclick="checkAdminPass()">Entrar</button>
+    <div id="admin-err" style="font-size:12px;color:var(--error);display:none;">Senha incorreta</div>
+  </div>
+
+  <div id="admin-content" style="display:none;flex-direction:column;gap:24px;">
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);">
+      <div class="stat-box">
+        <div class="stat-value" id="stat-keys">0</div>
+        <div class="stat-label">Chaves Ativas</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="stat-msgs">0</div>
+        <div class="stat-label">Mensagens Hoje</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">R$0</div>
+        <div class="stat-label">MRR Estimado</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">24/7</div>
+        <div class="stat-label">Uptime</div>
+      </div>
+    </div>
+
+    <div class="admin-grid">
+      <!-- BASE DE CONHECIMENTO -->
+      <div class="admin-card" style="grid-column: 1 / -1;">
+        <h3>📚 Base de Conhecimento — <span>seu expertise aqui</span></h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6;">
+          Escreva abaixo tudo que o agente deve saber: suas metodologias, benchmarks de mercado, 
+          erros comuns, como você avalia frotas, KPIs que você usa, experiências reais. 
+          Quanto mais detalhe, mais preciso o agente responde.
+        </p>
+        <textarea class="knowledge-textarea" id="knowledge-base" placeholder="Exemplo:
+
+## CUSTO POR KM
+O custo médio de uma frota de caminhões bem gerida no Brasil fica entre R$4,50 e R$6,00 por km rodado. Acima disso, há desperdício. Os principais vilões são: manutenção corretiva excessiva (indica falta de preventiva), consumo de combustível acima de 2,8 km/litro em carretas, multas e sinistros frequentes.
+
+## MANUTENÇÃO PREVENTIVA
+Todo veículo precisa de checklist diário pelo motorista antes de sair: nível de óleo, pressão dos pneus, freios, limpadores. Troca de óleo a cada 15.000 km para diesel. Pneus: alinhamento a cada 30.000 km. Empresa que não faz preventiva gasta em média 3x mais em corretiva.
+
+## KPIs ESSENCIAIS
+1. Custo por km (meta: abaixo de R$5,50 para carretas)
+2. Disponibilidade de frota (meta: acima de 92%)
+3. Consumo médio de combustível por veículo
+4. Índice de sinistros por 100.000 km
+5. Custo de manutenção por veículo/mês
+
+## MOTORISTAS
+Alta rotatividade de motorista é sinal de gestão ruim. O custo de substituir um motorista é de R$8.000 a R$15.000 quando considerado recrutamento, treinamento e produtividade perdida. Programa de reconhecimento e bonificação por meta de consumo reduzem turnover em até 40%.
+
+## TORRE DE CONTROLE
+Toda empresa com mais de 20 veículos precisa de torre de controle. Mínimo: rastreamento em tempo real, telemetria de comportamento do motorista (freadas bruscas, excesso de velocidade), e roteirização automatizada."></textarea>
+        <div class="save-hint">💾 As alterações ficam salvas no navegador. Para produção, conecte a um banco de dados.</div>
+        <button class="btn-save" onclick="saveKnowledge()">Salvar base de conhecimento</button>
+      </div>
+
+      <!-- CHAVES DE ACESSO -->
+      <div class="admin-card">
+        <h3>🔑 Chaves de Acesso — <span>clientes ativos</span></h3>
+        <div class="access-keys" id="keys-list"></div>
+        <div class="add-key-row">
+          <input type="text" id="new-key" placeholder="FROTA-XXXX-XXXX" 
+                 style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:10px 14px;border-radius:2px;outline:none;">
+          <select id="new-plan" style="background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:10px 14px;border-radius:2px;outline:none;">
+            <option value="STARTER">Starter</option>
+            <option value="PRO">Pro</option>
+            <option value="ENTERPRISE">Enterprise</option>
+          </select>
+          <button class="btn-add" onclick="addKey()">+ Adicionar</button>
+        </div>
+        <button class="btn-save" style="margin-top:12px;" onclick="generateKey()">⚡ Gerar chave automática</button>
+      </div>
+
+      <!-- PROMPT DO AGENTE -->
+      <div class="admin-card">
+        <h3>🤖 Personalidade do Agente</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6;">
+          Como o agente deve se comportar, qual tom usar, o que ele nunca deve responder.
+        </p>
+        <textarea class="knowledge-textarea" id="agent-personality" style="min-height:200px;" 
+          placeholder="Ex: Você é um consultor especialista em gestão de frota com 20 anos de experiência operacional no Brasil. Responde de forma direta e prática, sem enrolação. Sempre dá exemplos numéricos concretos. Quando o problema envolve alto risco financeiro, alerta o cliente antes de dar a solução. Nunca promete resultado garantido sem conhecer a operação completa do cliente."></textarea>
+        <button class="btn-save" onclick="savePersonality()">Salvar personalidade</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+// ===== STATE =====
+let currentPlan = 'PRO';
+let conversationHistory = [];
+let msgCount = parseInt(localStorage.getItem('fm_msg_count') || '0');
+
+// ===== DEFAULT DATA =====
+const DEFAULT_KEYS = [
+  { key: 'FROTA-DEMO-2024', plan: 'PRO' },
+  { key: 'FROTA-TEST-0001', plan: 'STARTER' }
+];
+
+const DEFAULT_KNOWLEDGE = `## CUSTO POR KM
+O custo médio de uma frota bem gerida no Brasil fica entre R$4,50 e R$6,00 por km rodado para caminhões. Acima disso, há desperdício claro. Os principais vilões são: manutenção corretiva excessiva (indica ausência de preventiva), consumo de combustível acima de 2,8 km/litro em carretas, multas, sinistros e ociosidade de frota.
+
+## MANUTENÇÃO PREVENTIVA
+Checklist diário obrigatório: nível de óleo, pressão dos pneus, freios, limpadores. Troca de óleo a cada 15.000 km para diesel. Pneus: alinhamento a cada 30.000 km. Empresa sem preventiva estruturada gasta em média 3x mais em corretiva. O custo de uma parada não planejada inclui: reboque, perda de frete, multa contratual e custo do motorista parado.
+
+## KPIs ESSENCIAIS DE FROTA
+1. Custo por km (meta: abaixo de R$5,50 para carretas)
+2. Disponibilidade de frota (meta: acima de 92%)
+3. Consumo médio de combustível por veículo
+4. Índice de sinistros por 100.000 km (meta: abaixo de 0,8)
+5. Custo de manutenção por veículo/mês
+6. Índice de entregas no prazo (OTIF)
+7. Custo de frete por tonelada transportada
+
+## GESTÃO DE MOTORISTAS
+Alta rotatividade é sinal de gestão ruim. O custo de substituir um motorista chega a R$15.000 considerando recrutamento, treinamento e produtividade perdida. Boas práticas: bonificação por meta de consumo de combustível, reconhecimento por zero sinistros, feedback mensal com dados de telemetria, e plano de carreira claro.
+
+## TORRE DE CONTROLE
+Toda empresa com mais de 20 veículos precisa de torre de controle mínima: rastreamento em tempo real 24/7, telemetria de comportamento do motorista (freadas bruscas, excesso de velocidade, aceleração agressiva), roteirização automatizada, e monitoramento de documentação dos veículos. Empresas com torre de controle reduzem sinistros em 35% e custos operacionais em 18% em média.
+
+## COMBUSTÍVEL
+Maior custo variável da frota, representa 35-45% do custo total. Gestão de abastecimento: sistema de controle com senha por motorista, metas individuais de consumo, comparativo diário entre veículos similares. Telemetria que monitora marcha lenta excessiva (acima de 20% do tempo ligado é alerta vermelho).
+
+## PNEUS
+Segundo maior custo de manutenção. Vida útil esperada: 120.000 km para pneu de qualidade em rodagem adequada. Causas de desgaste precoce: alinhamento e balanceamento negligenciados, pressão incorreta, sobrecarga. Programa de recapagem bem executado reduz custo em 40% vs pneu novo.`;
+
+const DEFAULT_PERSONALITY = `Você é um agente executivo de gestão de frota.
+
+CONTEXTO:
+Você atua como parceiro operacional e estratégico de gestores, diretores e CEOs de empresas de transporte e logística que utilizam esta plataforma para melhorar a performance da sua frota. Seu papel não é só informar, é cobrar execução, apontar pontos cegos e transformar dados em decisões e ações concretas com dono, prazo e métrica.
+
+SEU PAPEL:
+Atuar como um gestor de frota sênior ao lado do usuário. Direto, prático e sem enrolação. Sempre conectar análise com ação. Sempre lembrar o que ficou pendente. Sempre validar se foi feito. Sempre cobrar o que não foi feito e entender o porquê antes de seguir em frente.
+
+TOM E ESTILO:
+Seja direto, firme e prático, sem enrolação e sem teoria vazia. Seja humano, mas com padrão alto de cobrança. Não use travessões, use vírgulas. Evite respostas genéricas. Sempre transforme análise em ação com dono, prazo e métrica. Fale com o usuário como alguém que precisa evoluir como gestor para liderar uma operação de alta performance.
+
+REGRA OBRIGATÓRIA DE ABERTURA DE SESSÃO:
+Sempre que o usuário iniciar uma conversa ou enviar a primeira mensagem do dia, antes de qualquer análise nova, faça obrigatoriamente o seguinte:
+1. Resgate as últimas 3 a 5 ações que ficaram definidas para o usuário na sessão anterior.
+2. Para cada ação, pergunte diretamente: "Você fez isso?"
+3. Se a resposta for sim, registre, valide e parabenize de forma objetiva, sem exagero.
+4. Se a resposta for não, pergunte: "O que impediu?" e depois: "Qual é o novo prazo e o que muda para isso acontecer?"
+5. Só avance para novos temas depois de fechar o loop das pendências anteriores.
+Se for a primeira sessão do usuário e não houver histórico, inicie com um diagnóstico da frota com as perguntas da seção de onboarding abaixo.
+
+ONBOARDING, PRIMEIRA SESSÃO:
+Quando o usuário acessar pela primeira vez, faça estas perguntas em sequência, uma de cada vez, aguardando a resposta antes de avançar:
+1. Qual é o tamanho da sua frota hoje e quais tipos de veículo você opera?
+2. Qual é o principal problema que você quer resolver nos próximos 30 dias?
+3. Você tem controle hoje de custo por km, produtividade por veículo e índice de manutenção corretiva versus preventiva?
+4. Quem na sua equipe é responsável pela gestão da frota hoje?
+5. Qual é a sua meta de resultado para a operação nos próximos 3 meses?
+Com as respostas, monte um diagnóstico inicial com os principais riscos, oportunidades e prioridades de ação.
+
+ESTRUTURA OBRIGATÓRIA DE RESPOSTA:
+Sempre que o usuário enviar um relato, pergunta ou situação operacional, responda nesta estrutura:
+A) Situação real vs situação ideal: mostre com clareza onde a operação está e onde deveria estar, com números e métricas sempre que possível.
+B) Ponto cego: aponte o que o usuário provavelmente não está enxergando, seja um custo oculto, um risco ignorado, uma causa raiz não endereçada ou uma decisão sendo evitada.
+C) Decisão ou ação que move o resultado: indique o que realmente importa resolver agora versus o que é ruído ou distração operacional.
+D) Riscos e trade-offs: mostre os riscos de agir, os riscos de não agir e o custo de cada caminho.
+
+Além disso, entregue obrigatoriamente:
+- 3 insights curtos sobre a situação relatada
+- 3 perguntas duras para o usuário responder
+- Kill List: 2 coisas que o usuário deve parar de fazer esta semana na gestão da frota
+- Plano de 24h com ações objetivas, com dono e prazo
+- Plano de 7 dias com marcos claros
+
+QUANDO O TEMA FOR MANUTENÇÃO:
+Foque em custo de corretiva versus preventiva, índice de disponibilidade da frota, tempo médio entre falhas, custo por evento e responsável pelo plano. Não aceite "vou verificar" como resposta. Exija plano com data, responsável e métrica de controle.
+
+QUANDO O TEMA FOR PRODUTIVIDADE DE FROTA:
+Foque em km rodado por veículo, ociosidade, aproveitamento de carga, custo por km, margem por operação e SLA de entrega. Questione se o problema é de planejamento, de execução ou de falta de visibilidade.
+
+QUANDO O TEMA FOR CUSTO OPERACIONAL:
+Priorize combustível, manutenção, pneus, diárias, pedágio e custo fixo por veículo. Sempre compare com benchmarks do mercado. Sempre pergunte: "Você sabe qual veículo da sua frota está destruindo sua margem?"
+
+QUANDO O TEMA FOR MOTORISTAS E PESSOAS:
+Foque em performance individual, jornada, comportamento ao volante, treinamento, retenção e vínculo com resultado. Transforme cobrança em mecanismo, não em emoção.
+
+QUANDO O TEMA FOR TECNOLOGIA E TELEMETRIA:
+Questione se os dados disponíveis estão sendo usados para decisão ou só para relatório. Mostre onde a tecnologia pode reduzir custo, aumentar produtividade e melhorar segurança com ações concretas.
+
+QUANDO O TEMA FOR PLANEJAMENTO DE ROTAS:
+Foque em otimização de carga, redução de km vazio, janela de entrega, SLA e custo por rota. Questione se o planejamento é feito com antecedência ou no improviso.
+
+QUANDO O USUÁRIO PEDIR MENSAGENS OU FALAS:
+Escreva pronto para copiar e colar. Mantenha tom firme, elegante e humano. Quando necessário, crie uma versão mais direta e uma versão mais diplomática.
+
+QUANDO O USUÁRIO ESTIVER CONFUSO, force objetividade com esta estrutura:
+Qual é o objetivo? Qual métrica prova que deu certo? Qual o prazo? Quem é o dono? Qual o próximo passo nas próximas 24 horas?
+
+REGRAS IMPORTANTES:
+- Não bajule o usuário.
+- Não suavize quando ele estiver se enganando ou evitando uma decisão.
+- Não gere teoria sem ação.
+- Não aceite "vou acompanhar" como plano. Peça rotina, métrica e prazo.
+- Se o usuário estiver microgerenciando e sendo o gargalo da operação, aponte.
+- Se o usuário estiver evitando uma conversa difícil com um líder ou fornecedor, aponte.
+- Se o usuário estiver confundindo movimento com progresso, aponte.
+- Se o usuário repetir uma pendência sem executar pela segunda vez, aumente o tom de cobrança e questione se há um bloqueio real que precisa ser resolvido antes de qualquer coisa.
+
+PADRÃO ESPERADO:
+Este agente existe para ajudar o gestor a ter uma frota mais produtiva, mais barata, mais previsível e mais segura. O usuário deve sair de cada sessão com ações claras, prazos definidos e responsáveis nomeados. E deve voltar sabendo que vai ser cobrado pelo que prometeu fazer.
+
+Responda sempre em português brasileiro.`;
+
+// ===== INIT =====
+function init() {
+  if (!localStorage.getItem('fm_keys')) {
+    localStorage.setItem('fm_keys', JSON.stringify(DEFAULT_KEYS));
+  }
+  if (!localStorage.getItem('fm_knowledge')) {
+    localStorage.setItem('fm_knowledge', DEFAULT_KNOWLEDGE);
+  }
+  if (!localStorage.getItem('fm_personality')) {
+    localStorage.setItem('fm_personality', DEFAULT_PERSONALITY);
+  }
+}
+
+init();
+
+// ===== NAVIGATION =====
+function showLanding() {
+  document.getElementById('landing').style.display = 'flex';
+  document.getElementById('landing').style.flexDirection = 'column';
+  document.getElementById('access-gate').style.display = 'none';
+  document.getElementById('chat-app').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'none';
+}
+
+function selectPlan(planName) {
+  currentPlan = planName;
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('access-gate').style.display = 'flex';
+  document.getElementById('access-gate').style.alignItems = 'center';
+  document.getElementById('access-gate').style.justifyContent = 'center';
+}
+
+function showAdmin() {
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('admin-panel').style.display = 'flex';
+  document.getElementById('admin-content').style.display = 'none';
+  renderKeys();
+  document.getElementById('knowledge-base').value = localStorage.getItem('fm_knowledge') || DEFAULT_KNOWLEDGE;
+  document.getElementById('agent-personality').value = localStorage.getItem('fm_personality') || DEFAULT_PERSONALITY;
+}
+
+// ===== ACCESS VALIDATION =====
+function validateAccess() {
+  const input = document.getElementById('access-key-input').value.trim().toUpperCase();
+  const keys = JSON.parse(localStorage.getItem('fm_keys') || '[]');
+  const found = keys.find(k => k.key.toUpperCase() === input);
+
+  if (found) {
+    currentPlan = found.plan;
+    document.getElementById('plan-display').textContent = found.plan;
+    document.getElementById('access-gate').style.display = 'none';
+    document.getElementById('chat-app').style.display = 'flex';
+    document.getElementById('chat-app').style.flexDirection = 'column';
+    conversationHistory = [];
+    document.getElementById('chat-messages').innerHTML = '';
+    addWelcomeMessage();
+    document.getElementById('access-error').style.display = 'none';
+  } else {
+    document.getElementById('access-error').style.display = 'block';
+  }
+}
+
+// ===== CHAT =====
+function addWelcomeMessage() {
+  const welcome = `Bem-vindo. Vamos direto ao ponto.
+
+Antes de qualquer coisa, preciso entender com o que estou trabalhando para te dar respostas que valem alguma coisa.
+
+**Primeira pergunta:** Qual é o tamanho da sua frota hoje e quais tipos de veículo você opera?`;
+
+  appendMessage('agent', welcome);
+}
+
+function appendMessage(role, content) {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+
+  const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const avatarText = role === 'agent' ? 'FM' : 'EU';
+
+  div.innerHTML = `
+    <div class="msg-avatar">${avatarText}</div>
+    <div>
+      <div class="msg-content">${formatMessage(content)}</div>
+      <div class="msg-time">${time}</div>
+    </div>
+  `;
+
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function formatMessage(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/\n/g, '<br>')
+    .replace(/^/, '<p>').replace(/$/, '</p>')
+    .replace(/- (.*?)(?=<br>|<\/p>)/g, '• $1');
+}
+
+function showTyping() {
+  const container = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg agent';
+  div.id = 'typing-msg';
+  div.innerHTML = `
+    <div class="msg-avatar">FM</div>
+    <div class="msg-content typing-indicator">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  `;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-msg');
+  if (t) t.remove();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  input.value = '';
+  input.style.height = 'auto';
+
+  appendMessage('user', msg);
+
+  conversationHistory.push({ role: 'user', content: msg });
+
+  document.getElementById('btn-send').disabled = true;
+  showTyping();
+
+  // Update msg count
+  msgCount++;
+  localStorage.setItem('fm_msg_count', msgCount);
+
+  try {
+    const knowledge = localStorage.getItem('fm_knowledge') || DEFAULT_KNOWLEDGE;
+    const personality = localStorage.getItem('fm_personality') || DEFAULT_PERSONALITY;
+
+    const systemPrompt = `${personality}
+
+BASE DE CONHECIMENTO ESPECIALIZADA:
+${knowledge}
+
+PLANO DO CLIENTE: ${currentPlan}
+${currentPlan === 'STARTER' ? 'Cliente no plano Starter: respostas completas mas indique que para análises mais profundas o plano Pro é recomendado.' : ''}
+
+Responda sempre em português brasileiro. Use markdown básico: **negrito** para termos importantes. Seja específico e dê números sempre que possível.`;
+
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemPrompt,
+        messages: conversationHistory
+      })
+    });
+
+    const data = await response.json();
+    const reply = data.reply || data.error || 'Desculpe, ocorreu um erro. Tente novamente.';
+
+    removeTyping();
+    appendMessage('agent', reply);
+    conversationHistory.push({ role: 'assistant', content: reply });
+
+  } catch (err) {
+    removeTyping();
+    appendMessage('agent', 'Erro de conexão. Verifique sua internet e tente novamente.');
+  }
+
+  document.getElementById('btn-send').disabled = false;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function usePrompt(btn) {
+  document.getElementById('chat-input').value = btn.textContent;
+  document.getElementById('chat-input').focus();
+}
+
+// ===== ADMIN =====
+function checkAdminPass() {
+  const pass = document.getElementById('admin-pass-input').value;
+  // Senha padrão: ADMIN2024 — mude aqui
+  if (pass === 'ADMIN2024') {
+    document.getElementById('admin-content').style.display = 'flex';
+    document.getElementById('admin-content').style.flexDirection = 'column';
+    document.getElementById('admin-content').style.gap = '24px';
+    document.getElementById('admin-err').style.display = 'none';
+    updateStats();
+  } else {
+    document.getElementById('admin-err').style.display = 'block';
+  }
+}
+
+function updateStats() {
+  const keys = JSON.parse(localStorage.getItem('fm_keys') || '[]');
+  document.getElementById('stat-keys').textContent = keys.length;
+  document.getElementById('stat-msgs').textContent = localStorage.getItem('fm_msg_count') || '0';
+}
+
+function renderKeys() {
+  const keys = JSON.parse(localStorage.getItem('fm_keys') || '[]');
+  const list = document.getElementById('keys-list');
+  list.innerHTML = keys.map((k, i) => `
+    <div class="key-row">
+      <span class="key-code">${k.key}</span>
+      <span class="key-plan">${k.plan}</span>
+      <button class="key-del" onclick="deleteKey(${i})">×</button>
+    </div>
+  `).join('') || '<div style="font-size:12px;color:var(--muted);padding:12px;">Nenhuma chave cadastrada</div>';
+}
+
+function addKey() {
+  const key = document.getElementById('new-key').value.trim().toUpperCase();
+  const plan = document.getElementById('new-plan').value;
+  if (!key) return;
+
+  const keys = JSON.parse(localStorage.getItem('fm_keys') || '[]');
+  keys.push({ key, plan });
+  localStorage.setItem('fm_keys', JSON.stringify(keys));
+  document.getElementById('new-key').value = '';
+  renderKeys();
+  updateStats();
+}
+
+function generateKey() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const seg = () => Array.from({length: 4}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  document.getElementById('new-key').value = `FROTA-${seg()}-${seg()}`;
+}
+
+function deleteKey(i) {
+  const keys = JSON.parse(localStorage.getItem('fm_keys') || '[]');
+  keys.splice(i, 1);
+  localStorage.setItem('fm_keys', JSON.stringify(keys));
+  renderKeys();
+  updateStats();
+}
+
+function saveKnowledge() {
+  localStorage.setItem('fm_knowledge', document.getElementById('knowledge-base').value);
+  const btn = event.target;
+  btn.textContent = '✓ Salvo!';
+  setTimeout(() => btn.textContent = 'Salvar base de conhecimento', 2000);
+}
+
+function savePersonality() {
+  localStorage.setItem('fm_personality', document.getElementById('agent-personality').value);
+  const btn = event.target;
+  btn.textContent = '✓ Salvo!';
+  setTimeout(() => btn.textContent = 'Salvar personalidade', 2000);
+}
+</script>
+</body>
+</html>
