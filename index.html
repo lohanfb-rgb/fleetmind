@@ -1252,6 +1252,7 @@ Toda empresa com mais de 20 veículos precisa de torre de controle. Mínimo: ras
 <script>
 // ===== STATE =====
 let currentPlan = 'PRO';
+let currentAccessKey = '';
 let conversationHistory = [];
 let msgCount = parseInt(localStorage.getItem('fm_msg_count') || '0');
 
@@ -1419,6 +1420,7 @@ function validateAccess() {
 
   if (found) {
     currentPlan = found.plan;
+    currentAccessKey = input;
     document.getElementById('plan-display').textContent = found.plan;
     document.getElementById('access-gate').style.display = 'none';
     document.getElementById('chat-app').style.display = 'flex';
@@ -1527,23 +1529,22 @@ ${currentPlan === 'STARTER' ? 'Cliente no plano Starter: respostas completas mas
 
 Responda sempre em português brasileiro. Use markdown básico: **negrito** para termos importantes. Seja específico e dê números sempre que possível.`;
 
-const response = await fetch('/api/chat', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: conversationHistory
+        systemPrompt,
+        messages: conversationHistory,
+        accessKey: currentAccessKey
       })
     });
 
     const data = await response.json();
     let reply = '';
-if (data.reply && typeof data.reply === 'string') reply = data.reply;
-else if (data.content && Array.isArray(data.content)) reply = data.content.find(b => b.type === 'text')?.text || '';
-else if (data.error) reply = 'Erro: ' + data.error;
-if (!reply) reply = 'Desculpe, ocorreu um erro. Tente novamente.';
+    if (data.reply && typeof data.reply === 'string') reply = data.reply;
+    else if (data.content && Array.isArray(data.content)) reply = data.content.find(b => b.type === 'text')?.text || '';
+    else if (data.error) reply = 'Erro: ' + data.error;
+    if (!reply) reply = 'Desculpe, ocorreu um erro. Tente novamente.';
 
     removeTyping();
     appendMessage('agent', reply);
