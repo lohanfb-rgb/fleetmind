@@ -1471,15 +1471,15 @@ async function sendAutoResume() {
 
     const resumeMsg = { role: 'user', content: '[RETORNO DE SESSÃO] O cliente voltou. Resgate as pendências da sessão anterior e pergunte o que foi feito.' };
 
-    const response = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        systemPrompt,
-        messages: [...conversationHistory, resumeMsg],
-        accessKey: currentAccessKey
-      })
-    });
+const response = await fetch('/api/chat', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    systemPrompt,
+    messages: conversationHistory,
+    accessKey: currentAccessKey
+  })
+});
 
     const data = await response.json();
     let reply = data.reply || '';
