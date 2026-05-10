@@ -16,40 +16,36 @@ export default async function handler(req, res) {
   const KV_URL   = process.env.KV_REST_API_URL;
   const KV_TOKEN = process.env.KV_REST_API_TOKEN;
  
+  // Upstash REST API — formato correto usando pipeline de comandos
   async function kvGet(key) {
     try {
-      const r = await fetch(`${KV_URL}/get/${encodeURIComponent(key)}`, {
-        headers: { Authorization: `Bearer ${KV_TOKEN}` }
-      });
-      const d = await r.json();
-      if (!d.result) return null;
-      // Upstash retorna o valor já como string JSON
-      // Pode estar encapsulado em {"value": "..."} ou direto
-      let raw = d.result;
-      // Se for string que começa com {, tenta extrair campo value
-      try {
-        const parsed = JSON.parse(raw);
-        if (parsed && parsed.value) {
-          return JSON.parse(parsed.value);
-        }
-        return parsed;
-      } catch {
-        return null;
-      }
-    } catch { return null; }
-  }
- 
-  async function kvSet(key, value) {
-    try {
-      // Salva direto como JSON string, sem encapsular em {value}
-      const encoded = encodeURIComponent(key);
-      await fetch(`${KV_URL}/set/${encoded}`, {
+      const r = await fetch(`${KV_URL}/pipeline`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${KV_TOKEN}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(JSON.stringify(value))
+        body: JSON.stringify([['GET', key]])
+      });
+      const d = await r.json();
+      // Retorna array de resultados: [{result: "..."}]
+      const raw = d?.[0]?.result;
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (e) {
+      return null;
+    }
+  }
+ 
+  async function kvSet(key, value) {
+    try {
+      await fetch(`${KV_URL}/pipeline`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${KV_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify([['SET', key, JSON.stringify(value)]])
       });
     } catch {}
   }
@@ -58,10 +54,10 @@ export default async function handler(req, res) {
   let history = [];
   if (accessKey && KV_URL && KV_TOKEN) {
     const saved = await kvGet(`history:${accessKey}`);
-    if (saved && Array.isArray(saved)) history = saved;
+    if (Array.isArray(saved)) history = saved;
   }
  
-  // Monta mensagens: histórico + mensagem atual do usuário
+  // Monta mensagens: histórico + mensagem atual
   const lastUserMsg = currentMessages[currentMessages.length - 1];
   const allMessages = [...history, lastUserMsg];
   const trimmedMessages = allMessages.slice(-30);
