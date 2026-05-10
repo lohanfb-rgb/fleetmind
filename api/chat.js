@@ -16,22 +16,15 @@ export default async function handler(req, res) {
   const KV_URL   = process.env.KV_REST_API_URL;
   const KV_TOKEN = process.env.KV_REST_API_TOKEN;
  
-  // Upstash REST API — formato correto usando pipeline de comandos
   async function kvGet(key) {
     try {
-      const r = await fetch(`${KV_URL}/pipeline`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${KV_TOKEN}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify([['GET', key]])
+      const r = await fetch(`${KV_URL}/get/${key}`, {
+        headers: { Authorization: `Bearer ${KV_TOKEN}` }
       });
       const d = await r.json();
-      // Retorna array de resultados: [{result: "..."}]
-      const raw = d?.[0]?.result;
-      if (!raw) return null;
-      return JSON.parse(raw);
+      // Upstash retorna { result: "string_json" }
+      if (!d || d.result === null || d.result === undefined) return null;
+      return JSON.parse(d.result);
     } catch (e) {
       return null;
     }
@@ -39,25 +32,27 @@ export default async function handler(req, res) {
  
   async function kvSet(key, value) {
     try {
-      await fetch(`${KV_URL}/pipeline`, {
+      const jsonStr = JSON.stringify(value);
+      await fetch(`${KV_URL}/set/${key}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${KV_TOKEN}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify([['SET', key, JSON.stringify(value)]])
+        // Upstash SET via REST: body é o valor diretamente como JSON
+        body: JSON.stringify(jsonStr)
       });
     } catch {}
   }
  
-  // Busca histórico salvo
+  // Busca histórico salvo da chave
   let history = [];
   if (accessKey && KV_URL && KV_TOKEN) {
     const saved = await kvGet(`history:${accessKey}`);
     if (Array.isArray(saved)) history = saved;
   }
  
-  // Monta mensagens: histórico + mensagem atual
+  // Monta mensagens: histórico salvo + mensagem atual do usuário
   const lastUserMsg = currentMessages[currentMessages.length - 1];
   const allMessages = [...history, lastUserMsg];
   const trimmedMessages = allMessages.slice(-30);
@@ -93,7 +88,7 @@ export default async function handler(req, res) {
  
     const reply = data.content?.find(b => b.type === 'text')?.text || '';
  
-    // Salva histórico atualizado
+    // Salva histórico atualizado no Redis
     if (accessKey && KV_URL && KV_TOKEN) {
       const updatedHistory = [
         ...trimmedMessages,
