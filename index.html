@@ -1539,7 +1539,11 @@ const response = await fetch('/api/chat', {
     });
 
     const data = await response.json();
-    const reply = data.content?.[0]?.text || 'Desculpe, ocorreu um erro. Tente novamente.';
+    let reply = '';
+if (data.reply && typeof data.reply === 'string') reply = data.reply;
+else if (data.content && Array.isArray(data.content)) reply = data.content.find(b => b.type === 'text')?.text || '';
+else if (data.error) reply = 'Erro: ' + data.error;
+if (!reply) reply = 'Desculpe, ocorreu um erro. Tente novamente.';
 
     removeTyping();
     appendMessage('agent', reply);
