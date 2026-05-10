@@ -32,11 +32,9 @@ export default async function handler(req, res) {
 async function kvGet(key) {
     try {
       const d = await upstash(['GET', key]);
-      console.log('REDIS GET result:', JSON.stringify(d));
       if (!d || d.result === null || d.result === undefined) return null;
       return JSON.parse(d.result);
     } catch (e) { 
-      console.log('REDIS GET error:', e.message);
       return null; 
     }
   }
