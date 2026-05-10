@@ -906,44 +906,46 @@
     </div>
 
     <div class="plans">
-      <div class="plan" onclick="selectPlan('Starter · R$297/mês')">
-        <div class="plan-name">Starter</div>
-        <div class="plan-price">R$297<span>/mês</span></div>
-        <div class="plan-period">Acesso mensal</div>
-        <ul class="plan-features">
-          <li>50 consultas por mês</li>
-          <li>Diagnóstico de custos</li>
-          <li>Gestão de motoristas</li>
-          <li>Manutenção preventiva</li>
-        </ul>
-        <button class="btn-plan">Começar agora</button>
-      </div>
-
-      <div class="plan featured" onclick="selectPlan('Pro · R$597/mês')">
-        <div class="plan-tag">MAIS POPULAR</div>
-        <div class="plan-name">Pro</div>
-        <div class="plan-price">R$597<span>/mês</span></div>
-        <div class="plan-period">Acesso ilimitado</div>
+      <div class="plan" onclick="selectPlan('Essencial')">
+        <div class="plan-name">Essencial</div>
+        <div class="plan-price">R$497<span>/mês</span></div>
+        <div class="plan-period">Frotas de 10 a 30 veículos</div>
         <ul class="plan-features">
           <li>Consultas ilimitadas 24/7</li>
-          <li>Torre de controle de frota</li>
-          <li>Análise de KPIs avançada</li>
-          <li>Redução de custos operacionais</li>
-          <li>Segurança e rastreamento</li>
+          <li>Diagnóstico de custos e KPIs</li>
+          <li>Gestão de motoristas</li>
+          <li>Manutenção preventiva estruturada</li>
+          <li>Planejamento estratégico</li>
         </ul>
         <button class="btn-plan">Começar agora</button>
       </div>
 
-      <div class="plan" onclick="selectPlan('Enterprise · R$1.497/mês')">
-        <div class="plan-name">Enterprise</div>
-        <div class="plan-price">R$1.497<span>/mês</span></div>
-        <div class="plan-period">Agente customizado</div>
+      <div class="plan featured" onclick="selectPlan('Pro')">
+        <div class="plan-tag">MAIS POPULAR</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">R$997<span>/mês</span></div>
+        <div class="plan-period">Frotas de 30 a 100 veículos</div>
         <ul class="plan-features">
-          <li>Agente com sua marca</li>
-          <li>Base de conhecimento própria</li>
-          <li>Integração com seu ERP</li>
-          <li>Onboarding dedicado</li>
-          <li>Suporte prioritário</li>
+          <li>Consultas ilimitadas 24/7</li>
+          <li>DRE de margem por veículo</li>
+          <li>TCO — análise de compra de frota</li>
+          <li>Torre de controle e programação</li>
+          <li>CPK de pneu e manutenção</li>
+          <li>Análise tributária completa</li>
+        </ul>
+        <button class="btn-plan">Começar agora</button>
+      </div>
+
+      <div class="plan" onclick="selectPlan('Estratégico')">
+        <div class="plan-name">Estratégico</div>
+        <div class="plan-price" style="font-size:28px;margin-top:8px;">Sob consulta</div>
+        <div class="plan-period">Frotas acima de 100 veículos</div>
+        <ul class="plan-features">
+          <li>Tudo do plano Pro</li>
+          <li>Sessão mensal com especialista Bendini</li>
+          <li>Base de conhecimento customizada</li>
+          <li>Agente com identidade da sua empresa</li>
+          <li>Integração com ERP e sistemas</li>
         </ul>
         <button class="btn-plan">Falar com equipe</button>
       </div>
@@ -1016,46 +1018,58 @@
 
     <div style="text-align:center;margin-bottom:56px;">
       <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:16px;font-family:'DM Mono',monospace;">Base de conhecimento</div>
-      <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,3.5vw,44px);line-height:1.1;letter-spacing:-1px;">30 anos de expertise em <em style="font-family:'Instrument Serif',serif;color:var(--accent);font-weight:400;">6 pilares.</em></h2>
-      <p style="font-size:14px;color:var(--muted);max-width:420px;margin:16px auto 0;line-height:1.7;">Metodologia desenvolvida e testada pela Bendini ao longo de três décadas de operação logística real.</p>
+      <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,3.5vw,44px);line-height:1.1;letter-spacing:-1px;">30 anos de expertise em <em style="font-family:'Instrument Serif',serif;color:var(--accent);font-weight:400;">8 pilares.</em></h2>
+      <p style="font-size:14px;color:var(--muted);max-width:420px;margin:16px auto 0;line-height:1.7;">Metodologia desenvolvida e testada pela Bendini ao longo de três décadas. DRE por veículo e TCO de compra são diferenciais que nenhuma ferramenta de frota entrega hoje.</p>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:960px;margin:0 auto;">
 
       <div style="background:var(--surface);border:1px solid var(--border);padding:28px 24px;text-align:center;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-size:32px;margin-bottom:12px;">📋</div>
+        <div style="font-size:28px;margin-bottom:12px;">📋</div>
         <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">01</div>
-        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">Planejamento Estratégico</h3>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">Planejamento Estratégico</h3>
       </div>
 
       <div style="background:var(--surface);border:1px solid var(--border);padding:28px 24px;text-align:center;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-size:32px;margin-bottom:12px;">🔧</div>
+        <div style="font-size:28px;margin-bottom:12px;">🔧</div>
         <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">02</div>
-        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">Manutenção de Frota</h3>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">Manutenção de Frota</h3>
       </div>
 
       <div style="background:var(--surface);border:1px solid var(--border);padding:28px 24px;text-align:center;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-size:32px;margin-bottom:12px;">⚫</div>
+        <div style="font-size:28px;margin-bottom:12px;">⚫</div>
         <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">03</div>
-        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">Gestão de Pneus</h3>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">Gestão de Pneus</h3>
       </div>
 
       <div style="background:var(--surface);border:1px solid var(--border);padding:28px 24px;text-align:center;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-size:32px;margin-bottom:12px;">🚛</div>
+        <div style="font-size:28px;margin-bottom:12px;">🚛</div>
         <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">04</div>
-        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">Gestão de Motoristas</h3>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">Gestão de Motoristas</h3>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);padding:28px 24px;text-align:center;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:28px;margin-bottom:12px;">📡</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">05</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">Programação Operacional</h3>
       </div>
 
       <div style="background:rgba(232,255,58,0.06);border:1px solid rgba(232,255,58,0.25);padding:28px 24px;text-align:center;">
-        <div style="font-size:32px;margin-bottom:12px;">📊</div>
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">05 · Diferencial</div>
-        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--accent);">DRE por Veículo</h3>
+        <div style="font-size:28px;margin-bottom:12px;">📊</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">06 · Diferencial</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--accent);">DRE por Veículo</h3>
+      </div>
+
+      <div style="background:rgba(232,255,58,0.06);border:1px solid rgba(232,255,58,0.25);padding:28px 24px;text-align:center;">
+        <div style="font-size:28px;margin-bottom:12px;">🏷️</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">07 · Diferencial</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--accent);">TCO de Compra</h3>
       </div>
 
       <div style="background:var(--surface);border:1px solid var(--border);padding:28px 24px;text-align:center;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
-        <div style="font-size:32px;margin-bottom:12px;">🚚</div>
-        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">06</div>
-        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px;">Aquisição de Veículos</h3>
+        <div style="font-size:28px;margin-bottom:12px;">🚚</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">08</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px;">Aquisição de Veículos</h3>
       </div>
 
     </div>
@@ -1064,7 +1078,7 @@
     <div style="text-align:center;margin-top:64px;padding:48px;border:1px solid var(--border);background:var(--surface);max-width:640px;margin-left:auto;margin-right:auto;margin-top:64px;">
       <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;font-family:'DM Mono',monospace;">Pronto para começar?</div>
       <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(24px,3vw,36px);margin-bottom:20px;letter-spacing:-0.5px;">Sua frota mais eficiente<br>começa <em style="font-family:'Instrument Serif',serif;color:var(--accent);font-weight:400;">hoje.</em></h3>
-      <button onclick="selectPlan('Pro · R$597/mês')" style="background:var(--accent);border:none;color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:16px 40px;cursor:pointer;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Acessar agora →</button>
+      <button onclick="selectPlan('Pro')" style="background:var(--accent);border:none;color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:16px 40px;cursor:pointer;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Acessar agora — R$997/mês →</button>
     </div>
 
   </div>
