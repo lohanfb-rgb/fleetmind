@@ -19,12 +19,19 @@ export default async function handler(req, res) {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01'
+        'anthropic-version': '2023-06-01',
+        'anthropic-beta': 'prompt-caching-2024-07-31'
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-5',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 1500,
-        system: finalSystem,
+        system: [
+          {
+            type: 'text',
+            text: finalSystem,
+            cache_control: { type: 'ephemeral' }
+          }
+        ],
         messages: finalMessages
       })
     });
