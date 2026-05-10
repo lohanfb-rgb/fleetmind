@@ -1587,7 +1587,7 @@ ${currentPlan === 'STARTER' ? 'Cliente no plano Starter: respostas completas mas
 
 Responda sempre em português brasileiro. Use markdown básico: **negrito** para termos importantes. Seja específico e dê números sempre que possível.`;
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
