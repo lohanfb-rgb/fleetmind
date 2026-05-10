@@ -140,9 +140,11 @@
     color: var(--muted);
     max-width: 540px;
     line-height: 1.7;
-    margin: 32px auto 56px;
+    margin: 32px auto 24px;
     animation: fadeDown 0.6s 0.2s ease both;
   }
+
+  .hero-sub strong { color: var(--accent); font-weight: 500; }
 
   .plans {
     display: grid;
@@ -892,9 +894,16 @@
     <h1>Gestão de<br><em>frota</em><br>inteligente.</h1>
 
     <p class="hero-sub">
-      Acesse um consultor especialista em gestão de frotas, disponível 24 horas por dia. 
-      Responde com base em anos de experiência operacional real. Sem agendamentos. Sem espera.
+      Consultoria especializada em gestão de frotas, disponível <strong>24 horas por dia.</strong>
+      Desenvolvida com base em mais de <strong>30 anos de experiência operacional</strong> da Bendini no segmento logístico.
+      Sem agendamentos. Sem espera. Resultado com execução.
     </p>
+
+    <!-- SELO GRUPO BENDINI -->
+    <div style="display:inline-flex;align-items:center;gap:12px;background:rgba(232,255,58,0.05);border:1px solid rgba(232,255,58,0.15);padding:10px 18px;border-radius:2px;margin-bottom:40px;">
+      <svg width="14" height="14" fill="none" stroke="var(--accent)" viewBox="0 0 24 24" style="flex-shrink:0;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+      <span style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);">Uma empresa do <span style="color:var(--accent);font-weight:500;">Grupo Bendini</span> · Operador Logístico</span>
+    </div>
 
     <div class="plans">
       <div class="plan" onclick="selectPlan('Starter · R$297/mês')">
@@ -943,18 +952,133 @@
     <div class="trust-bar">
       <div class="trust-item">
         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-        Conhecimento real de mercado
+        30+ anos de operação logística
       </div>
       <div class="trust-item">
         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        Resposta imediata
+        Metodologia testada em campo
       </div>
       <div class="trust-item">
         <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         Disponível 24/7
       </div>
+      <div class="trust-item">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        ISO 9001 · SASSMAQ · OEA
+      </div>
     </div>
   </div>
+
+  <!-- ===== COMO FUNCIONA ===== -->
+  <div style="background:var(--surface);border-top:1px solid var(--border);padding:80px 48px;position:relative;z-index:1;">
+
+    <div style="text-align:center;margin-bottom:64px;">
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:16px;font-family:'DM Mono',monospace;">Como funciona</div>
+      <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(32px,4vw,52px);line-height:1;letter-spacing:-1px;">Do problema à <em style="font-family:'Instrument Serif',serif;color:var(--accent);font-weight:400;">execução</em><br>em minutos.</h2>
+      <p style="font-size:15px;color:var(--muted);max-width:480px;margin:20px auto 0;line-height:1.7;">Cada sessão começa com diagnóstico, termina com plano de ação e cobra resultado na próxima.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);">
+
+      <div style="padding:32px 28px;border-right:1px solid var(--border);position:relative;">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:48px;color:rgba(232,255,58,0.08);line-height:1;margin-bottom:16px;">01</div>
+        <div style="width:32px;height:2px;background:var(--accent);margin-bottom:16px;"></div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:10px;">Diagnóstico inicial</h3>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;">O agente conduz onboarding estruturado: tamanho da frota, operação, principais dores e metas para 90 dias.</p>
+      </div>
+
+      <div style="padding:32px 28px;border-right:1px solid var(--border);position:relative;">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:48px;color:rgba(232,255,58,0.08);line-height:1;margin-bottom:16px;">02</div>
+        <div style="width:32px;height:2px;background:var(--accent);margin-bottom:16px;"></div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:10px;">Análise e ponto cego</h3>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;">Situação real vs ideal, ponto cego da operação, decisão que move resultado e riscos de agir ou não agir.</p>
+      </div>
+
+      <div style="padding:32px 28px;border-right:1px solid var(--border);position:relative;">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:48px;color:rgba(232,255,58,0.08);line-height:1;margin-bottom:16px;">03</div>
+        <div style="width:32px;height:2px;background:var(--accent);margin-bottom:16px;"></div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:10px;">Plano de execução</h3>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;">Toda sessão termina com Plano de 24h e 7 dias, com ações concretas, dono definido e prazo estabelecido.</p>
+      </div>
+
+      <div style="padding:32px 28px;position:relative;background:rgba(232,255,58,0.04);">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:48px;color:rgba(232,255,58,0.08);line-height:1;margin-bottom:16px;">04</div>
+        <div style="width:32px;height:2px;background:var(--accent);margin-bottom:16px;"></div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:10px;color:var(--accent);">Cobrança de resultado</h3>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;">Na próxima sessão, o agente resgata as ações pendentes e pergunta diretamente: você fez? Sem loop fechado, não avança.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== 6 PILARES ===== -->
+  <div style="background:var(--bg);border-top:1px solid var(--border);padding:80px 48px;position:relative;z-index:1;">
+
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:40px;margin-bottom:56px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:16px;font-family:'DM Mono',monospace;">Base de conhecimento</div>
+        <h2 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(32px,4vw,52px);line-height:1;letter-spacing:-1px;">30 anos de expertise.<br><em style="font-family:'Instrument Serif',serif;color:var(--accent);font-weight:400;">6 pilares.</em> Um agente.</h2>
+      </div>
+      <p style="font-size:14px;color:var(--muted);max-width:360px;line-height:1.7;flex-shrink:0;">O agente responde com a metodologia desenvolvida e testada pela Bendini ao longo de três décadas de operação logística real.</p>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);">
+
+      <div class="pilar-card" style="background:var(--surface);padding:32px 28px;cursor:default;transition:background 0.2s;" onmouseover="this.style.background='#161616'" onmouseout="this.style.background='var(--surface)'">
+        <div style="font-size:28px;margin-bottom:16px;">📋</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">Pilar 01</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;">Planejamento Estratégico</h3>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;">SWOT, Mapa Estratégico em 5 perspectivas, KPIs por área, Contrato de Resultados e reuniões de avaliação. Do plano à execução.</p>
+      </div>
+
+      <div class="pilar-card" style="background:var(--surface);padding:32px 28px;cursor:default;transition:background 0.2s;" onmouseover="this.style.background='#161616'" onmouseout="this.style.background='var(--surface)'">
+        <div style="font-size:28px;margin-bottom:16px;">🔧</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">Pilar 02</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;">Manutenção de Frota</h3>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;">Preventiva estruturada, sistema GUT de priorização, ordens de serviço, programação de paradas e gestão ambiental completa.</p>
+      </div>
+
+      <div class="pilar-card" style="background:var(--surface);padding:32px 28px;cursor:default;transition:background 0.2s;" onmouseover="this.style.background='#161616'" onmouseout="this.style.background='var(--surface)'">
+        <div style="font-size:28px;margin-bottom:16px;">⚫</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">Pilar 03</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;">Gestão de Pneus</h3>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;">Marcação individual por número de fogo, rodízio técnico por posição, CPK real, recapagem e descarte ambiental correto.</p>
+      </div>
+
+      <div class="pilar-card" style="background:var(--surface);padding:32px 28px;cursor:default;transition:background 0.2s;" onmouseover="this.style.background='#161616'" onmouseout="this.style.background='var(--surface)'">
+        <div style="font-size:28px;margin-bottom:16px;">🚛</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">Pilar 04</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;">Gestão de Motoristas</h3>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;">Premiação variável por performance, ranking de desempenho, comunicação proativa, telemetria e programa de Extra Economia.</p>
+      </div>
+
+      <div class="pilar-card" style="background:rgba(232,255,58,0.04);border:1px solid rgba(232,255,58,0.12);padding:32px 28px;cursor:default;transition:background 0.2s;" onmouseover="this.style.background='rgba(232,255,58,0.07)'" onmouseout="this.style.background='rgba(232,255,58,0.04)'">
+        <div style="font-size:28px;margin-bottom:16px;">📊</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">Pilar 05 · Diferencial</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;color:var(--accent);">DRE por Veículo</h3>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;">Resultado final por veículo com créditos tributários, ICMS monofásico do diesel, CIAP e geração de caixa real. Poucas empresas no Brasil fazem isso.</p>
+      </div>
+
+      <div class="pilar-card" style="background:var(--surface);padding:32px 28px;cursor:default;transition:background 0.2s;" onmouseover="this.style.background='#161616'" onmouseout="this.style.background='var(--surface)'">
+        <div style="font-size:28px;margin-bottom:16px;">🚚</div>
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-family:'DM Mono',monospace;">Pilar 06</div>
+        <h3 style="font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:10px;">Aquisição de Veículos</h3>
+        <p style="font-size:12px;color:var(--muted);line-height:1.7;">Checklist completo por área de responsabilidade, itens obrigatórios por tipo de carreta e kit mínimo de ferramentas e segurança.</p>
+      </div>
+
+    </div>
+
+    <!-- CTA final -->
+    <div style="text-align:center;margin-top:64px;padding:48px;border:1px solid var(--border);background:var(--surface);">
+      <div style="font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;font-family:'DM Mono',monospace;">Pronto para começar?</div>
+      <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(24px,3vw,40px);margin-bottom:20px;letter-spacing:-0.5px;">Sua frota mais eficiente<br>começa <em style="font-family:'Instrument Serif',serif;color:var(--accent);font-weight:400;">hoje.</em></h3>
+      <p style="font-size:14px;color:var(--muted);max-width:440px;margin:0 auto 32px;line-height:1.7;">Escolha um plano, receba sua chave de acesso e comece a conversar com o agente agora. Sem burocracia.</p>
+      <button onclick="selectPlan('Pro · R$597/mês')" style="background:var(--accent);border:none;color:#000;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:18px 48px;cursor:pointer;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Acessar agora →</button>
+    </div>
+
+  </div>
+
+
 </section>
 
 <!-- ===== ACCESS GATE ===== -->
@@ -1398,29 +1522,19 @@ ${currentPlan === 'STARTER' ? 'Cliente no plano Starter: respostas completas mas
 
 Responda sempre em português brasileiro. Use markdown básico: **negrito** para termos importantes. Seja específico e dê números sempre que possível.`;
 
-    const response = await fetch('/api/chat', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        systemPrompt,
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: systemPrompt,
         messages: conversationHistory
       })
     });
 
     const data = await response.json();
-  let reply = '';
-if (typeof data === 'string') {
-  reply = data;
-} else if (data.reply && typeof data.reply === 'string') {
-  reply = data.reply;
-} else if (data.content && Array.isArray(data.content)) {
-  reply = data.content.find(b => b.type === 'text')?.text || '';
-} else if (data.error) {
-  reply = 'Erro: ' + data.error;
-} else {
-  reply = JSON.stringify(data);
-}
-if (!reply) reply = 'Desculpe, ocorreu um erro. Tente novamente.';
+    const reply = data.content?.[0]?.text || 'Desculpe, ocorreu um erro. Tente novamente.';
 
     removeTyping();
     appendMessage('agent', reply);
