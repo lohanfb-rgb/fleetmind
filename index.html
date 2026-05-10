@@ -1427,7 +1427,7 @@ function validateAccess() {
     document.getElementById('chat-app').style.flexDirection = 'column';
     conversationHistory = [];
     document.getElementById('chat-messages').innerHTML = '';
-    addWelcomeMessage();
+    loadHistory();
     document.getElementById('access-error').style.display = 'none';
   } else {
     document.getElementById('access-error').style.display = 'block';
@@ -1435,6 +1435,64 @@ function validateAccess() {
 }
 
 // ===== CHAT =====
+async function loadHistory() {
+  try {
+    // Busca histórico do Redis via backend
+    const response = await fetch('/api/history', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ accessKey: currentAccessKey })
+    });
+    const data = await response.json();
+
+    if (data.history && Array.isArray(data.history) && data.history.length > 0) {
+      // Tem histórico — renderiza na tela e carrega no conversationHistory
+      conversationHistory = data.history;
+      data.history.forEach(msg => {
+        appendMessage(msg.role === 'user' ? 'user' : 'agent', msg.content);
+      });
+      // Envia mensagem automática para o agente resgatar pendências
+      await sendAutoResume();
+    } else {
+      // Sem histórico — mensagem de boas-vindas padrão
+      addWelcomeMessage();
+    }
+  } catch (e) {
+    addWelcomeMessage();
+  }
+}
+
+async function sendAutoResume() {
+  showTyping();
+  try {
+    const knowledge = localStorage.getItem('fm_knowledge') || DEFAULT_KNOWLEDGE;
+    const personality = localStorage.getItem('fm_personality') || DEFAULT_PERSONALITY;
+    const systemPrompt = `${personality}\n\nBASE DE CONHECIMENTO:\n${knowledge}\n\nPLANO DO CLIENTE: ${currentPlan}`;
+
+    const resumeMsg = { role: 'user', content: '[RETORNO DE SESSÃO] O cliente voltou. Resgate as pendências da sessão anterior e pergunte o que foi feito.' };
+
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemPrompt,
+        messages: [...conversationHistory, resumeMsg],
+        accessKey: currentAccessKey
+      })
+    });
+
+    const data = await response.json();
+    let reply = data.reply || '';
+    removeTyping();
+    if (reply) {
+      appendMessage('agent', reply);
+      conversationHistory.push({ role: 'assistant', content: reply });
+    }
+  } catch (e) {
+    removeTyping();
+  }
+}
+
 function addWelcomeMessage() {
   const welcome = `Bem-vindo. Vamos direto ao ponto.
 
@@ -1529,15 +1587,15 @@ ${currentPlan === 'STARTER' ? 'Cliente no plano Starter: respostas completas mas
 
 Responda sempre em português brasileiro. Use markdown básico: **negrito** para termos importantes. Seja específico e dê números sempre que possível.`;
 
-    const response = await fetch('/api/chat', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    systemPrompt,
-    messages: conversationHistory,
-    accessKey: currentAccessKey
-  })
-});
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemPrompt,
+        messages: conversationHistory,
+        accessKey: currentAccessKey
+      })
+    });
 
     const data = await response.json();
     let reply = '';
