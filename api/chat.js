@@ -16,32 +16,30 @@ export default async function handler(req, res) {
   const KV_URL   = process.env.KV_REST_API_URL;
   const KV_TOKEN = process.env.KV_REST_API_TOKEN;
  
+  // Upstash REST API: envia comandos Redis como array
+  async function upstash(command) {
+    const r = await fetch(KV_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${KV_TOKEN}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(command)
+    });
+    return r.json();
+  }
+ 
   async function kvGet(key) {
     try {
-      const r = await fetch(`${KV_URL}/get/${key}`, {
-        headers: { Authorization: `Bearer ${KV_TOKEN}` }
-      });
-      const d = await r.json();
-      // Upstash retorna { result: "string_json" }
+      const d = await upstash(['GET', key]);
       if (!d || d.result === null || d.result === undefined) return null;
       return JSON.parse(d.result);
-    } catch (e) {
-      return null;
-    }
+    } catch { return null; }
   }
  
   async function kvSet(key, value) {
     try {
-      const jsonStr = JSON.stringify(value);
-      await fetch(`${KV_URL}/set/${key}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${KV_TOKEN}`,
-          'Content-Type': 'application/json'
-        },
-        // Upstash SET via REST: body é o valor diretamente como JSON
-        body: JSON.stringify(jsonStr)
-      });
+      await upstash(['SET', key, JSON.stringify(value)]);
     } catch {}
   }
  
@@ -52,7 +50,7 @@ export default async function handler(req, res) {
     if (Array.isArray(saved)) history = saved;
   }
  
-  // Monta mensagens: histórico salvo + mensagem atual do usuário
+  // Monta mensagens: histórico + mensagem atual
   const lastUserMsg = currentMessages[currentMessages.length - 1];
   const allMessages = [...history, lastUserMsg];
   const trimmedMessages = allMessages.slice(-30);
@@ -88,7 +86,7 @@ export default async function handler(req, res) {
  
     const reply = data.content?.find(b => b.type === 'text')?.text || '';
  
-    // Salva histórico atualizado no Redis
+    // Salva histórico atualizado
     if (accessKey && KV_URL && KV_TOKEN) {
       const updatedHistory = [
         ...trimmedMessages,
